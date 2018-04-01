@@ -1,7 +1,11 @@
 require 'socket'
+require_relative 'responses'
 class Server
+  include Response
 
-  attr_reader :tcp_server, :client, :count
+  attr_reader :tcp_server,
+              :client,
+              :count
 
   def initialize
     @tcp_server = TCPServer.new(9292)
@@ -11,8 +15,6 @@ class Server
   end
 
   def request
-    @count += 1
-    puts 'Ready for a request'
     while line = client.gets and !line.chomp.empty?
       @request_lines << line.chomp
     end
@@ -20,48 +22,45 @@ class Server
     puts @request_lines.inspect
   end
 
-  def output
-    puts 'Sending response.'
-    output = "<html><head></head><body>#{response}</body></html>"
-    headers = ['http/1.1 200 ok',
-               "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
-               'server: ruby',
-               'content-type: text/html; charset=iso-8859-1',
-               "content-length: #{output.length}\r\n\r\n"].join("\r\n")
-    client.puts headers
-    client.puts output
-    puts ['Wrote this response:', headers, output].join("\n")
-    puts "\nResponse complete, exiting."
-  end
 
   def response
-    if @request_lines.join.include?('hello')
-      "Hello, World! (#{count})"
-    elsif @request_lines.join.include?('datetime')
-      Time.now.strftime('%I:%M %p on %A %B %W, %Y')
-    elsif shutdown?
-      stop_listening
+    if path == "Path: /hello\n"
+      @count += 1
+      response_to_hello(count)
+    elsif path == "Path: /datetime\n"
+      datetime
+    elsif path == "Path: /shutdown\n"
+      stop_listening(count)
     else
-      '<pre>' "Verb: #{@request_lines[0][0..2]}\n"\
-      "Path: #{@request_lines[0][4..-9]}\n"\
-      "Protocol: #{@request_lines[0][-8..-1]}\n"\
-      "Host: #{@request_lines[1][6..14]}\n"\
-      "Port: #{@request_lines[1][-4..-1]}\n"\
-      "Origin: #{@request_lines[1][6..14]}\n"\
-      "Accept: #{@request_lines[6][8..-1]}\n"\
-      'Hello World!! </pre>'
+      '<pre>' + verb + path + protocol + host + port + origin + accept + '<pre>'
     end
   end
 
-  def shutdown?
-    @request_lines.join.include?('shutdown')
+  def output
+    puts 'Sending response.'
+    output = "<html><head></head><body>#{response}</body></html>"
+    headers = [ 'http/1.1 200 ok',
+                "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
+                'server: ruby',
+                'content-type: text/html; charset=iso-8859-1',
+                "content-length: #{output.length}\r\n\r\n"].join("\r\n")
+    client.puts headers
+    client.puts output
+    puts ['Wrote this response:', headers, output].join("\n")
+    if path == "Path: /shutdown\n"
+      client.close
+      puts "\nResponse complete, exiting."
+      abort
+    end
   end
 
-  def stop_listening
-    "Total Requests: #{count}"
+  def start
+    loop do
+      request
+      output
+      puts 'Ready for a request'
+      @client = tcp_server.accept
+      @request_lines = []
+    end
   end
 end
-    server = Server.new
-    server.request
-    server.output
-    # server.client.close
