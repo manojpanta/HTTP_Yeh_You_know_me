@@ -1,5 +1,6 @@
 require 'socket'
 require_relative 'responses'
+require_relative 'word_search'
 class Server
   include Response
 
@@ -12,6 +13,7 @@ class Server
     @client = tcp_server.accept
     @request_lines = []
     @count = 0
+    @word_search = WordSearch.new
   end
 
   def request
@@ -24,13 +26,16 @@ class Server
 
 
   def response
+    @count += 1
     if path == "Path: /hello\n"
-      @count += 1
       response_to_hello(count)
     elsif path == "Path: /datetime\n"
       datetime
     elsif path == "Path: /shutdown\n"
       stop_listening(count)
+    elsif path.include?("word_search?")
+      word = path.split[1].split("?")[1].split("=")[1]
+      @word_search.feedback(word)
     else
       '<pre>' + verb + path + protocol + host + port + origin + accept + '<pre>'
     end

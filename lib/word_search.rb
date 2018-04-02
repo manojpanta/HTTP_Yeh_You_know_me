@@ -1,4 +1,5 @@
 class WordSearch
+  include Response
 
   attr_reader :file
 
@@ -16,8 +17,6 @@ class WordSearch
     else
       "#{word} is not a known word"
     end
-
-
   end
 
 end
