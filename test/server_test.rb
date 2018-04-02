@@ -14,6 +14,4 @@ class ServerTest < MiniTest::Test
 
 
 
-
-
 end

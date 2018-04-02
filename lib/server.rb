@@ -24,7 +24,6 @@ class Server
     puts @request_lines.inspect
   end
 
-
   def response
     @count += 1
     if path == "Path: /hello\n"

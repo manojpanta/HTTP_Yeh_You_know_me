@@ -5,7 +5,7 @@ module Response
   end
 
   def datetime
-    Time.now.strftime('%I:%M %p on %A %B %W, %Y')
+    Time.now.strftime('%l:%M %p on %A, %B %d, %C%y')
   end
 
   def verb
