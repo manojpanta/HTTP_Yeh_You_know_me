@@ -35,8 +35,15 @@ class ServerTest < MiniTest::Test
   end
 
   def test_for_shutdown_path
+    skip
     response = Faraday.get('http://127.0.0.1:9292/shutdown')
 
     assert response.body.include?("Total Requests")
+  end
+
+  def test_if_header_shows_up_in_response
+    response = Faraday.get('http://127.0.0.1:9292/datetime')
+
+    assert_equal "ruby", response.headers["server"]
   end
 end
