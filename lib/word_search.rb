@@ -18,5 +18,4 @@ class WordSearch
       "#{word} is not a known word"
     end
   end
-
 end
