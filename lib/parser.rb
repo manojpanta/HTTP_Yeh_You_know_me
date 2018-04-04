@@ -36,6 +36,6 @@ module Parser
   end
 
   def content_length
-    parse["Content-Length"].to_i
+    parse['Content-Length'].to_i
   end
 end

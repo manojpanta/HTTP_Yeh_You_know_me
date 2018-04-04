@@ -38,18 +38,18 @@ class ServerTest < MiniTest::Test
     skip
     response = Faraday.get('http://127.0.0.1:9292/shutdown')
 
-    assert response.body.include?("Total Requests")
+    assert response.body.include?('Total Requests')
   end
 
   def test_if_header_shows_up_in_response
     response = Faraday.get('http://127.0.0.1:9292/datetime')
 
-    assert_equal "ruby", response.headers["server"]
+    assert_equal 'ruby', response.headers['server']
   end
 
   def test_passing_game_path_will_give_response_from_game_class
     response = Faraday.get('http://127.0.0.1:9292/game')
-    param = "guesses have been taken, most recent guess was"
+    param = 'guesses have been taken, most recent guess was'
 
     assert response.body.include?(param)
   end
