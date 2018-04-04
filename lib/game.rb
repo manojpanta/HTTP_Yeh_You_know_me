@@ -10,7 +10,6 @@ class Game
 
   def take_guesses(guess)
     @count += 1
-    'Good luck!'
     @guesses << guess
     feedback(guess)
   end

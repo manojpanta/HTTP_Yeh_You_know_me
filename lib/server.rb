@@ -2,7 +2,7 @@ require 'socket'
 require_relative 'responses'
 require_relative 'parser'
 require_relative 'word_search'
-require_relative './lib/game'
+require_relative 'game'
 class Server
   include Response
   include Parser
@@ -37,8 +37,13 @@ class Server
       respond_to_datetime
     elsif path == "Path: /shutdown\n"
       stop_listening(count)
-    elsif path == "Path: /game\n"
+    elsif path == "Path: /game\n" and verb == "Verb: GET\n"
       @game.response
+    elsif path.include?("start_game") && verb == "Verb: POST\n"
+      "Good Luck!"
+    elsif path.include?("game?") && verb == "Verb: POST\n"
+      guess = path.split[1].split("?")[1].split("=")[1]
+      @game.take_guesses(guess)
     elsif path.include?("word_search?")
       word = path.split[1].split("?")[1].split("=")[1]
       @word_search.feedback(word)
