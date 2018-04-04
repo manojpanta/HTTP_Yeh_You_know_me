@@ -2,6 +2,7 @@ require 'socket'
 require_relative 'responses'
 require_relative 'parser'
 require_relative 'word_search'
+require_relative './lib/game'
 class Server
   include Response
   include Parser
@@ -17,6 +18,7 @@ class Server
     @client = tcp_server.accept
     @count = 0
     @word_search = WordSearch.new
+    @game = Game.new
   end
 
   def request
@@ -35,6 +37,8 @@ class Server
       respond_to_datetime
     elsif path == "Path: /shutdown\n"
       stop_listening(count)
+    elsif path == "Path: /game\n"
+      @game.response
     elsif path.include?("word_search?")
       word = path.split[1].split("?")[1].split("=")[1]
       @word_search.feedback(word)
