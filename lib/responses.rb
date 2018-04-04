@@ -1,42 +1,22 @@
 module Response
 
-  def response_to_hello(count)
+  def respond_to_hello(count)
     "Hello, World! (#{count})"
   end
 
-  def datetime
-    Time.now.strftime('%I:%M %p on %A %B %W, %Y')
-  end
-
-  def verb
-    "Verb: #{@request_lines[0].split[0]}\n"
-  end
-
-  def path
-    "Path: #{@request_lines[0].split[1]}\n"
-  end
-
-  def protocol
-    "Protocol: #{@request_lines[0].split[2]}\n"
-  end
-
-  def host
-    "Host: #{@request_lines[1].split[1].split(":")[0]}\n"
-  end
-
-  def port
-    "Port: #{@request_lines[1].split[1].split(":")[1]}\n"
-  end
-
-  def origin
-    "Origin: #{@request_lines[1].split[1].split(":")[0]}\n"
-  end
-
-  def accept
-    "Accept: #{@request_lines[6].split[1]}\n"
+  def respond_to_datetime
+    Time.now.strftime('%l:%M %p on %A, %B %d, %C%y')
   end
 
   def stop_listening(count)
     "Total Requests: #{count}"
+  end
+
+  def headers(output)
+    [ 'http/1.1 200 ok',
+                "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
+                'server: ruby',
+                'content-type: text/html; charset=iso-8859-1',
+                "content-length: #{output.length}\r\n\r\n"].join("\r\n")
   end
 end
