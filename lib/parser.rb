@@ -34,4 +34,8 @@ module Parser
   def accept
     "Accept: #{parse['Accept']}\n"
   end
+
+  def content_length
+    parse["Content-Length"].to_i
+  end
 end
