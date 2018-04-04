@@ -41,8 +41,8 @@ class Server
       @game.response
     elsif path.include?("start_game") && verb == "Verb: POST\n"
       "Good Luck!"
-    elsif path.include?("game?") && verb == "Verb: POST\n"
-      guess = path.split[1].split("?")[1].split("=")[1]
+    elsif path == "Path: /game\n" and verb == "Verb: POST\n"
+      guess =  @client.read(parse["Content-Length"].to_i).split("=")[1]
       @game.take_guesses(guess)
     elsif path.include?("word_search?")
       word = path.split[1].split("?")[1].split("=")[1]
