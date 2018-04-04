@@ -18,7 +18,6 @@ class Server
     @client = tcp_server.accept
     @count = 0
     @word_search = WordSearch.new
-    @game = Game.new
   end
 
   def request
@@ -32,7 +31,7 @@ class Server
 
 
   def shutdown?
-    path == "Path: /shutdown\n"
+    path == '/shutdown'
   end
 
   def start

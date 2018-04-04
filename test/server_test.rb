@@ -6,7 +6,6 @@ require 'faraday'
 
 class ServerTest < MiniTest::Test
   def test_if_it_exists
-    skip
     server = Server.new
 
     assert_instance_of Server, server

@@ -19,6 +19,14 @@ module Response
      "content-length: #{output.length}\r\n\r\n"].join("\r\n")
   end
 
+  def redirect_headers(status_code, new_location)
+    ["http/1.1 #{status_code}",
+     "Location: #{new_location}",
+     "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
+     'server: ruby',
+     'content-type: text/html; charset=iso-8859-1'].join("\r\n")
+  end
+
   def output
     puts 'Sending response.'
     output = "<html><head></head><body>#{response}</body></html>"
@@ -29,30 +37,33 @@ module Response
   end
 
   def response
-    if path == "Path: /hello\n"
+    if path == '/hello'
       respond_to_hello(count)
 
-    elsif path == "Path: /datetime\n"
+    elsif path == '/datetime'
       respond_to_datetime
 
-    elsif path == "Path: /shutdown\n"
+    elsif path == '/shutdown'
       stop_listening(count)
 
-    elsif path == "Path: /game\n" and verb == "Verb: GET\n"
+    elsif path == '/game' and verb == 'GET'
       @game.response
 
-    elsif path.include?('start_game') && verb == "Verb: POST\n"
+    elsif path.include?('start_game') && verb == 'POST'
+      @game = Game.new
       'Good Luck!'
-    elsif path == "Path: /game\n" and verb == "Verb: POST\n"
+    elsif path == '/game' and verb == 'POST'
       guess =  @client.read(content_length).split('=')[1]
       @game.take_guesses(guess)
+      headers = redirect_headers("302 Moved Permanently", "http://127.0.0.1:9292/game")
+      client.puts headers
 
     elsif path.include?('word_search?')
       word = path.split[1].split('?')[1].split('=')[1]
       @word_search.feedback(word)
 
     else
-      '<pre>' + verb + path + protocol + host + port + origin + accept + '<pre>'
+      '<pre>' + "Verb: #{verb}\n" + "Path: #{path}\n" + "Protocol: #{protocol}\n" + "Host: #{host}\n" + "Port: #{port}\n" + "Origin: #{origin}\n" + "Accept: #{accept}\n" + '<pre>'
     end
   end
 end

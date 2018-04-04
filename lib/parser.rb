@@ -1,14 +1,14 @@
 module Parser
   def verb
-    "Verb: #{@request_lines[0].split[0]}\n"
+    "#{@request_lines[0].split[0]}"
   end
 
   def path
-    "Path: #{@request_lines[0].split[1]}\n"
+    "#{@request_lines[0].split[1]}"
   end
 
   def protocol
-    "Protocol: #{@request_lines[0].split[2]}\n"
+    "#{@request_lines[0].split[2]}"
   end
 
   def parse
@@ -20,19 +20,19 @@ module Parser
   end
 
   def host
-    "Host: #{parse['Host']}\n"
+    "#{parse['Host']}"
   end
 
   def port
-    "Port: #{@request_lines[1].split[1].split(':')[1]}\n"
+    "#{@request_lines[1].split[1].split(':')[1]}"
   end
 
   def origin
-    "Origin: #{parse['Host']}\n"
+    "#{parse['Host']}"
   end
 
   def accept
-    "Accept: #{parse['Accept']}\n"
+    "#{parse['Accept']}"
   end
 
   def content_length

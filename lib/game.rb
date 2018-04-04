@@ -11,7 +11,6 @@ class Game
   def take_guesses(guess)
     @count += 1
     @guesses << guess
-    feedback(guess)
   end
 
   def response
