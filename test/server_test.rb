@@ -1,7 +1,5 @@
-require 'pry'
+require_relative 'test_helper'
 require './lib/server'
-require 'minitest/autorun'
-require 'minitest/pride'
 require 'faraday'
 
 class ServerTest < MiniTest::Test
@@ -28,7 +26,7 @@ class ServerTest < MiniTest::Test
     assert response.body.include?('on')
   end
 
-  def test_if_header_shows_up_in_response
+  def test_if_header_shows_up_in_response_by_testing_server_which_lies_in_header
     response = Faraday.get('http://127.0.0.1:9292/datetime')
 
     assert_equal 'ruby', response.headers['server']
@@ -51,5 +49,4 @@ class ServerTest < MiniTest::Test
 
     assert response.body.include?('xcvn is not a known word,')
   end
-
 end

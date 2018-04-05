@@ -1,7 +1,6 @@
+require_relative 'test_helper'
 require 'pry'
 require './lib/word_search'
-require 'minitest/autorun'
-require 'minitest/pride'
 
 class WordSearchTest < Minitest::Test
 
