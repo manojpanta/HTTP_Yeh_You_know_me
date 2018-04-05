@@ -47,15 +47,17 @@ module Response
       stop_listening(count)
 
     elsif path == '/game' and verb == 'GET'
-      @game.response
+      @game.game_response
 
     elsif path.include?('start_game') && verb == 'POST'
       @game = Game.new
-      'Good Luck!'
+      headers = redirect_headers("301 Moved Permanently", "http://127.0.0.1:9292/game")
+      client.puts headers
+
     elsif path == '/game' and verb == 'POST'
       guess =  @client.read(content_length).split('=')[1]
       @game.take_guesses(guess)
-      headers = redirect_headers("302 Moved Permanently", "http://127.0.0.1:9292/game")
+      headers = redirect_headers("302 Found", "http://127.0.0.1:9292/game")
       client.puts headers
 
     elsif path.include?('word_search?')

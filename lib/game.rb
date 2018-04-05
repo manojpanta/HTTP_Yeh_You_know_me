@@ -1,21 +1,28 @@
 class Game
   attr_reader :guesses,
               :answer
+  attr_accessor :running
 
-  def initialize(answer = (1..100).to_a.sample(1).join)
+  def initialize(answer = rand(100))
     @guesses = []
     @answer = answer
     @count = 0
+    @running = false
   end
 
   def take_guesses(guess)
     @count += 1
     @guesses << guess
+    feedback(guess)
   end
 
-  def response
-    "#{@guesses.length} guesses have been taken, most recent guess was"\
-    " #{@guesses.last} and it was #{feedback(@guesses.last)}"
+  def game_response
+    if @guesses.empty?
+      'Good Luck!'
+    else
+      "#{@guesses.length} guesses have been taken, most recent guess was"\
+      " #{@guesses.last} and it was #{feedback(@guesses.last)}"
+    end
   end
 
   def feedback(guess)
