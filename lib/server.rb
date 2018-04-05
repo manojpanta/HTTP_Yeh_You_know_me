@@ -30,7 +30,6 @@ class Server
     puts @request_lines.inspect
   end
 
-
   def shutdown?
     path == '/shutdown'
   end
