@@ -17,6 +17,7 @@ class Server
     @request_lines = []
     @client = tcp_server.accept
     @count = 0
+    @hello_count = 0
     @word_search = WordSearch.new
   end
 

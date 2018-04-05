@@ -1,6 +1,7 @@
 module Response
-  def respond_to_hello(count)
-    "Hello, World! (#{count})"
+  def respond_to_hello
+    @hello_count += 1
+    "Hello, World! (#{@hello_count})"
   end
 
   def respond_to_datetime
@@ -38,32 +39,28 @@ module Response
 
   def response
     if path == '/hello'
-      respond_to_hello(count)
-
+      respond_to_hello
     elsif path == '/datetime'
       respond_to_datetime
-
     elsif path == '/shutdown'
       stop_listening(count)
-
+    elsif path == '/force_error'
+      raise SystemError
     elsif path == '/game' and verb == 'GET'
       @game.game_response
-
     elsif path.include?('start_game') && verb == 'POST'
       @game = Game.new
-      headers = redirect_headers("301 Moved Permanently", "http://127.0.0.1:9292/game")
+      headers = redirect_headers('301 Moved Permanently', 'http://127.0.0.1:9292/game')
       client.puts headers
-
     elsif path == '/game' and verb == 'POST'
       guess =  @client.read(content_length).split('=')[1]
       @game.take_guesses(guess)
-      headers = redirect_headers("302 Found", "http://127.0.0.1:9292/game")
+      headers = redirect_headers('302 Found', 'http://127.0.0.1:9292/game')
       client.puts headers
-
     elsif path.include?('word_search?')
-      word = path.split[1].split('?')[1].split('=')[1]
-      @word_search.feedback(word)
-
+      word1 = path.split('=')[1].split('&')[0]
+      word2 = path.split('=')[2]
+      "#{@word_search.feedback(word1)}, #{@word_search.feedback(word2)}"
     else
       '<pre>' + "Verb: #{verb}\n" + "Path: #{path}\n" + "Protocol: #{protocol}\n" + "Host: #{host}\n" + "Port: #{port}\n" + "Origin: #{origin}\n" + "Accept: #{accept}\n" + '<pre>'
     end
