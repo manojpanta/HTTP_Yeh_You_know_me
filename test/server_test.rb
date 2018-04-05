@@ -34,12 +34,22 @@ class ServerTest < MiniTest::Test
     assert_equal 'ruby', response.headers['server']
   end
 
-  def test_passing_game_path_will_give_response_from_game_class
-    skip
-    response = Faraday.post('http://127.0.0.1:9292/start_game')
+  def test_it_responses_404_not_found_when_unknown_path_is_used
+    response = Faraday.get('http://127.0.0.1:9292/hellothere')
 
-    expected = response.body.include?('Good Luck')
-
-    assert expected
+    assert response.body.include?('404 not found!')
   end
+
+  def test_it_server_responses_from_word_search_class_when_searching_known_word
+    response = Faraday.get('http://127.0.0.1:9292/word_search?word=pizza')
+
+    assert response.body.include?('pizza is a known word,')
+  end
+
+  def test_it_server_responses_from_word_search_class_when_searching_unknownword
+    response = Faraday.get('http://127.0.0.1:9292/word_search?word=xcvn')
+
+    assert response.body.include?('xcvn is not a known word,')
+  end
+
 end
