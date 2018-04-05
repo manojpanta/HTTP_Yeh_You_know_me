@@ -14,6 +14,8 @@ class WordSearch
   def feedback(word)
     if known?(word)
       "#{word} is a known word"
+    elsif word.nil?
+      nil
     else
       "#{word} is not a known word"
     end
