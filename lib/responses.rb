@@ -51,7 +51,7 @@ module Response
       raise SystemError
 
     elsif !valid_paths.include?(path) && !path.include?('word_search?')
-      '404 not found'
+      '404 not found!'
 
     elsif path == '/game' and verb == 'GET'
       @game.game_response
@@ -78,6 +78,6 @@ module Response
   end
 
   def valid_paths
-    ['/hello', '/datetime', '/shutdown', '/force_error', '/game', '/start_game']
+    ['/hello', '/', '/datetime', '/shutdown', '/force_error', '/game', '/start_game']
   end
 end

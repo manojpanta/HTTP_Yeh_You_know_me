@@ -1,13 +1,11 @@
 class Game
   attr_reader :guesses,
               :answer
-  attr_accessor :running
 
   def initialize(answer = rand(100))
     @guesses = []
     @answer = answer
     @count = 0
-    @running = false
   end
 
   def take_guesses(guess)

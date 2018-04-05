@@ -3,7 +3,7 @@ require './lib/word_search'
 require 'minitest/autorun'
 require 'minitest/pride'
 
-class WordSearchTest< Minitest::Test
+class WordSearchTest < Minitest::Test
 
   def test_if_it_exists
     wordsearch = WordSearch.new
