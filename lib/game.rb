@@ -24,11 +24,11 @@ class Game
   end
 
   def feedback(guess)
-    if guess == answer
+    if guess.to_i == @answer.to_i
       'correct!'
-    elsif guess.to_i > answer.to_i
+    elsif guess.to_i > @answer.to_i
       'too high'
-    elsif guess.to_i < answer.to_i
+    elsif guess.to_i < @answer.to_i
       'too low'
     end
   end
